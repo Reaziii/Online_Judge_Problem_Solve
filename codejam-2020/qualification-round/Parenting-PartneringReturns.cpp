@@ -4,136 +4,127 @@
 #define pn printf("\n")
 #define For(e,f,i) for(int i=e;i<f;i++)
 #define reset(x,e) memset(x,e,sizeof(x))
-#define input freopen("input.txt","r",stdin);
-#define output freopen("output2.txt","w",stdout)
+#define input freopen("input.txt","r",stdin)
+#define output  freopen("output.txt","w",stdout);
 using namespace std;
-typedef long long int ll;
+typedef int ll;
 
-int matrix[100][100];
 
-int final_matrix[100][100];
-int k=19;
-void printm(ll n){
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            cout<<final_matrix[i][j]<<" ";
-        }
-        cout<<endl;
+ll jsh=0;
+ll csh=0;
+bool is_j_free(int s,int e){
+    if(jsh<=s)
+    {
+        jsh=e;
+        return 1;
+
     }
+    else return 0;
 
 }
-bool isafe(int x,int y,int z,int n){
-    for(int i=0;i<n;i++){
-        if(matrix[x][i]==z) return false;
+
+
+bool is_c_free(int s,int e){
+    if(csh<=s){
+        csh=e;
+        return 1;
 
     }
-    for(int i=0;i<n;i++){
-        if(matrix[i][y]==z) return false;
-
-    }
-
-    return true;
+    else return 0;
 
 }
 
 
 
-int solve(ll n,ll row, ll col,ll k){
-    if(col==n){
-        col=0;
-        row=row+1;
-        solve(n,row,col,k);
-
-    }
-    else {
-        for(int i=1;i<=n;i++){
-            if(isafe(row,col,i,n)==true){
-                matrix[row][col]=i;
-                if(col==n-1 && row==n-1){
-                    int sum=0;
-                    for(int f=0;f<n;f++){
-                        sum+=matrix[f][f];
-                    }
-                    if(sum==k) {
-                        for(int i=0;i<n;i++){
-                            for(int j=0;j<n;j++){
-                                final_matrix[i][j]=matrix[i][j];
-                            }
-                        }
-
-                        return 0;
 
 
-                    }
+struct times{
+    int start;
+    int stop;
+    int rnk;
 
-                }
-                int cd=solve(n,row,col+1,k);
-                if(cd==0) return 0;
+};
 
-
-            }
-            matrix[row][col]=0;
-
-        }
-
-
-
-    }
-
-    return 1;
+bool comp(times x,times y){
+    if(x.start<y.start)return true;
+    else return false;
 
 
 }
-
-int mainsolve(ll n,ll k){
-    for(int i=1;i<=n;i++){
-        reset(matrix,0);
-        matrix[0][0]=i;
-        int g = solve(n,0,1,k);
-        if(g==0) return 0;
-
-    }
-
-
-
-}
-
-
 
 int main(){
-//    input;
-//    output;
-
-
-    int cs;
-    int cn=1;
+    ll cs,cn=1;
     cin>>cs;
     while(cs--){
+        jsh=0;
+        csh=0;
         ll n;
-        cin>>n>>k;
+        cin>>n;
+        vector<times>times(n);
+
+        for(ll i=0;i<n;i++){
+
+            cin>>times[i].start;
+            cin>>times[i].stop;
+            times[i].rnk=i;
+//            times[i].start/=60;
+//            times[i].stop/=60;
+
+        }
+
+        sort(times.begin(),times.end(),comp);
+//
+//        for(int i=0;i<n;i++){
+//            cout<<times[i].start<<" "<<times[i].stop;
+//            cout<<endl;
+//
+//        }
+
         pcase(cn);
+        bool f2=true;
+        string s;
 
-        if(k==n+1 || k==n*n-1){
-            cout<<"IMPOSSIBLE";
-            pn;
-            continue;
+        for(int i=0;i<n;i++)s+=".";
+        for(int i=0;i<n;i++){
+
+            if(is_j_free(times[i].start,times[i].stop)){
+                s[times[i].rnk]='C';
+
+            }
+            else {
+                if(is_c_free(times[i].start,times[i].stop)){
+                    s[times[i].rnk]='J';
+
+                }
+                else {
+                    f2=false;
+
+                }
+
+            }
+
+            //cout<<jsh<<" "<<csh<<endl;
+
 
         }
 
 
 
-        reset(matrix,0);
-        reset(final_matrix,0);
 
-        mainsolve(n,k);
-        if(final_matrix[0][0]==0){
-            cout<<"IMPOSSIBLE";
-            pn;
-            continue;
-        }
-        cout<<"POSSIBLE";
-        pn;
-        printm(n);
+
+
+        //cout<<imp<<endl;
+        if(f2)cout<<s<<endl;
+        else cout<<"IMPOSSIBLE"<<endl;
+
+
+
+
+
+
+
+
+
 
     }
 
@@ -141,4 +132,3 @@ int main(){
 
 
 }
-
