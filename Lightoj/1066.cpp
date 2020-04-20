@@ -1,6 +1,8 @@
 /*
   Bismillahir Rahmanir Raheem
-
+  
+  
+  **********Used BFS and dijkstra********
 */
 #include<bits/stdc++.h>
 #define sc(x)        scanf("%lld",&x)
